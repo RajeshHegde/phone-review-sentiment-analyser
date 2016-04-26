@@ -1,0 +1,1 @@
+url = 'http://www.gsmarena.com/motorola_moto_e_dual_sim-6323.php'
