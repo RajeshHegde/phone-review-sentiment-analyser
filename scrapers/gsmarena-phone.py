@@ -14,19 +14,14 @@ import json
 import re
 
 from common.phone import Phone
+from common.crawler import Crawler
 
-class GSMAreanaCrawler:
+class GSMAreanaPhoneCrawler:
     def __init__(self, url):
         self.url = url
 
     def crawl(self):
-        try:
-            request = urllib2.urlopen(self.url)
-            page = request.read().encode('utf8')
-        except Exception, e:
-            print 'Failed to read webpage : %s' % e
-
-        soup = BeautifulSoup(page, 'html.parser')
+        soup = Crawler.get_soup(self.url)
 
         spec_tables = soup.findAll('table')
 
@@ -76,6 +71,4 @@ class GSMAreanaCrawler:
 
         phone.save()
 
-# logging.basicConfig(filename='phone_specs_crawl.log', level=logging.DEBUG)
-
-GSMAreanaCrawler('http://www.gsmarena.com/motorola_moto_e_dual_sim-6323.php').crawl()
+GSMAreanaPhoneCrawler('http://www.gsmarena.com/motorola_moto_e_dual_sim-6323.php').crawl()
