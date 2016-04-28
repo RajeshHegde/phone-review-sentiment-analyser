@@ -21,4 +21,4 @@ class Review:
                 'review_raw_text': self.review_raw_text
             })
         except:
-            print "Error in Phone.save method"
+            print "Error in Review.save method"
