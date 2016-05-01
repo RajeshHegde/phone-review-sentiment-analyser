@@ -7,6 +7,13 @@ from common.database import Database
 
 reviews = Database().db.reviews
 
+# cursor = reviews.find({})
+# for review in cursor:
+# 	review['sentiment_score'] = {'battery': 0, 'design': 0, 'camera': 0, 'display': 0, 'sound': 0, 'heat': 0, 'overall': 0}
+# 	reviews.save(review)
+
+# exit()
+
 sentiments = [
 		{
 			'name': 'battery',
@@ -46,10 +53,10 @@ for sentiment in sentiments:
 		regex = r"([^.]*?%s[^.]*\.)" % (sentiment_regex)
 		sentences = re.findall(regex, review_raw_text)
 		sentiment_score = get_sentiment_score(".".join(sentences))
+		overall_score = get_sentiment_score(review_raw_text)
 
-		review['sentiment_score'] = {
-			sentiment['name']: sentiment_score
-		}
+		review['sentiment_score'][sentiment['name']] = sentiment_score
+		review['sentiment_score']['overall'] = overall_score
 
 		reviews.save(review)
 
@@ -72,19 +79,7 @@ for sentiment in sentiments:
 
 	for count in cursor:
 		print count['positive'], count['negative']
-
-# for review in cursor:
-# 	review_raw_text = review['review_raw_text']
-# 	regex = r"([^.]*?%s[^.]*\.)" % ("|".join(sentiments[3]['alias']))
-# 	sentences = re.findall(regex, review_raw_text)
-# 	sentiment_score = get_sentiment_score(".".join(sentences))
-# 	print sentiment_score
-
-# 	review['sentiment_score'] = {
-# 		"battery": sentiment_score
-# 	}
-
-# 	reviews.save(review)	
+	
 
 # cursor = reviews.aggregate([{ 
 #     "$group": { 
@@ -94,26 +89,6 @@ for sentiment in sentiments:
 #         } 
 #     } 
 # }])
-
-'''
-# [{ 
-#     "$project": {
-#         "_id": 0,
-#         "pos_sentiment": {"$cond": [{"$gt": ["$sentiment_score.battery", 0]}, "$sentiment_score.battery", 0]},
-#         "neg_sentiment": {"$cond": [{"$lt": ["$sentiment_score.battery", 0]}, "$sentiment_score.battery", 0]}
-#     }
-# },
-# { 
-#     "$group": {
-#     "_id": null,
-#     "SumPosSentiment": {"$sum": "$pos_sentiment"},
-#     "SumNegSentiment": {"$sum": "$neg_sentiment"}
-#     }
-# }]
-'''
-
-# for count in cursor:
-# 	print count['total']
 
 
 # import nltk

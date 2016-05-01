@@ -25,7 +25,8 @@ class Review:
                     'camera': 0,
                     'display': 0,
                     'sound': 0,
-                    'heat': 0
+                    'heat': 0,
+                    'overall': 0
                 }
             })
         except:
