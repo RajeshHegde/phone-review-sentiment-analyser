@@ -16,7 +16,7 @@ class Review:
         reviews = Database().db.reviews
         try:
             reviews.insert_one({
-                'source': self.source  ,
+                'source': self.source,
                 'phone_name': self.phone_name,
                 'review_raw_text': self.review_raw_text,
                 'sentiment_score': {
