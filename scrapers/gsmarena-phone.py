@@ -57,9 +57,9 @@ class GSMAreanaPhoneCrawler:
                     elif key == 'Card slot':
                         phone.memory_cart_slot = value
                     elif key == 'Primary':
-                        phone.camera_front = value
-                    elif key == 'Secondary':
                         phone.camera_back = value
+                    elif key == 'Secondary':
+                        phone.camera_front = value
                     else:
                         battery_regex = re.compile('.*\d*\s?mAh.*')
                         matches = battery_regex.search(value)

@@ -41,44 +41,44 @@ sentiments = [
 		}
 	]
 
-# for sentiment in sentiments:
-# 	sentiment_regex = "|".join(sentiment['alias'])
-# 	cursor = reviews.find({
-# 		"review_raw_text" : {
-# 			"$regex" : ".*(%s).*" % (sentiment_regex)
-# 			}
-# 		})
-# 	for review in cursor:
-# 		review_raw_text = review['review_raw_text']
-# 		regex = r"([^.]*?%s[^.]*\.)" % (sentiment_regex)
-# 		sentences = re.findall(regex, review_raw_text)
-# 		sentiment_score = get_sentiment_score(".".join(sentences))
-# 		overall_score = get_sentiment_score(review_raw_text)
+for sentiment in sentiments:
+	sentiment_regex = "|".join(sentiment['alias'])
+	cursor = reviews.find({
+		"review_raw_text" : {
+			"$regex" : ".*(%s).*" % (sentiment_regex)
+			}
+		})
+	for review in cursor:
+		review_raw_text = review['review_raw_text']
+		regex = r"([^.]*?%s[^.]*\.)" % (sentiment_regex)
+		sentences = re.findall(regex, review_raw_text)
+		sentiment_score = get_sentiment_score(".".join(sentences))
+		overall_score = get_sentiment_score(review_raw_text)
 
-# 		review['sentiment_score'][sentiment['name']] = sentiment_score
-# 		review['sentiment_score']['overall'] = overall_score
+		review['sentiment_score'][sentiment['name']] = sentiment_score
+		review['sentiment_score']['overall'] = overall_score
 
-# 		reviews.save(review)
+		reviews.save(review)
 
-# 	score_query_part = "$sentiment_score.%s" % (sentiment['name'])
+	score_query_part = "$sentiment_score.%s" % (sentiment['name'])
 
-# 	cursor = reviews.aggregate([{ 
-# 	    "$project": {
-# 	        "_id": 0,
-# 	        "positive_sentiment": {"$cond": [{"$gt": [score_query_part, 0]}, 1, 0]},
-# 	        "negative_sentiment": {"$cond": [{"$lt": [score_query_part, 0]}, 1, 0]}
-# 	    }
-# 	},
-# 	{ 
-# 	    "$group": {
-# 	    	"_id": "null",
-# 	    	"positive": {"$sum": "$positive_sentiment"},
-# 	    	"negative": {"$sum": "$negative_sentiment"}
-# 	    }
-# 	}])
+	cursor = reviews.aggregate([{ 
+	    "$project": {
+	        "_id": 0,
+	        "positive_sentiment": {"$cond": [{"$gt": [score_query_part, 0]}, 1, 0]},
+	        "negative_sentiment": {"$cond": [{"$lt": [score_query_part, 0]}, 1, 0]}
+	    }
+	},
+	{ 
+	    "$group": {
+	    	"_id": "null",
+	    	"positive": {"$sum": "$positive_sentiment"},
+	    	"negative": {"$sum": "$negative_sentiment"}
+	    }
+	}])
 
-# 	for count in cursor:
-# 		print count['positive'], count['negative']
+	for count in cursor:
+		print count['positive'], count['negative']
 	
 
 cursor = reviews.aggregate([{ 
